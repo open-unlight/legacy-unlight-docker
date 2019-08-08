@@ -1,0 +1,6 @@
+[submodule "src"]
+	path = src
+	url = https://github.com/unlightcpa/Unlight.git
+[submodule "assets"]
+	path = assets
+	url = https://github.com/unlightcpa/Unlight-Images.git
