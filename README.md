@@ -15,7 +15,7 @@ This repository provides a pre-package docker image for compile client (SWF) and
 
 For compile client or serve a game server, you need to download this repository to your local machine or server.
 
-```
+```bash
 git clone https://github.com/open-unlight/legacy-unlight-docker.git
 cd legacy-unlight-docker
 # Download offical source code and assets
@@ -27,7 +27,28 @@ git submodule update --recursive
 
 ### Client
 
-TODO
+The fonts are included in `Unlight.swf`, you have to download the font file and put it into `fonts/` directory.
+
+|Language|Required Fonts|
+|--------|--------------|
+|Traditional Chinese| cwming.ttf (cwTeXMing 明體), wt004.ttf (王漢宗特明體), nbr.ttf|
+
+> `nbr.ttf` is `Bradley Gratis` but with customize.
+
+Next, you need to configure `compile.env` to define the preferences you want.
+
+```bash
+# Copy example file and modify
+cp compile.env.example compile.env
+```
+
+Then you can compile `Unlight.swf` via Docker.
+
+```bash
+make client
+```
+
+> More customize options will add soon
 
 ### Server
 

@@ -27,7 +27,29 @@ git submodule update --recursive
 
 ### 客戶端
 
-TODO
+因為字體檔案會被在編譯的時候加入 `Unlight.swf` 所以需要把對應的字體放到 `fonts/` 資料夾裡面。
+
+|語言|必要字體|
+|--------|--------------|
+|繁體中文| cwming.ttf (cwTeXMing 明體), wt004.ttf (王漢宗特明體), nbr.ttf|
+
+> `nbr.ttf` 是叫做 `Bradley Gratis` 的字體，但是 Unlight 是有客製化過的。
+
+然後要設定編譯環境，透過設定 `compile.env` 來定義需要的編譯設定。
+
+```bash
+# 可以先複製範例檔然後調整
+cp compile.env.example compile.env
+```
+
+接下來透過 Docker 就可以將 `Unlight.swf` 編譯出來。
+
+```bash
+make client
+```
+
+> 目前還暫時無法做太多客製化，會陸續加入客製化選項。
+
 
 ### 伺服端
 
