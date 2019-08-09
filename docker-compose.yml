@@ -1,0 +1,89 @@
+version: '3.4'
+
+# TODO: Put into .env file
+x-database: &database
+  MYSQL_DATABASE: unlight_db
+  MYSQL_USER: unlight
+  MYSQL_PASSWORD: unlight
+  MYSQL_ROOT_PASSWORD: unlight
+
+x-image: &image
+  image: unlight-server
+  env_file:
+    - server.env
+  restart: unless-stopped
+  depends_on:
+    - db
+    - memcached
+services:
+  xmlsocket:
+    <<: *image
+    command: server xmlsocket
+    ports:
+      - '11999:11999' # XMLSocket for Flash Policy
+  auth_server:
+    <<: *image
+    command: server authentication 12001
+    ports:
+      - '12001:12001'
+  lobby_server:
+    <<: *image
+    command: server lobby 12002
+    ports:
+      - '12002:12002'
+  data_server:
+    <<: *image
+    command: server data_lobby 12032
+    ports:
+      - '12032:12032'
+  quest_server:
+    <<: *image
+    command: server quest 12005
+    ports:
+      - '12005:12005'
+  raid_server:
+    <<: *image
+    command: server raid 12050
+    ports:
+      - '12050:12050'
+  raid_chat_server:
+    <<: *image
+    command: server raid_chat 12090
+    ports:
+      - '12090:12090'
+  raid_data_server:
+    <<: *image
+    command: server raid_data 12100
+    ports:
+      - '12100:12100'
+  raid_rank_server:
+    <<: *image
+    command: server raid_rank 12070
+    ports:
+      - '12070:12070'
+  global_chat_server:
+    <<: *image
+    command: server global_chat 12020
+    ports:
+      - '12020:12020'
+  game_server:
+    <<: *image
+    command: server game 12008
+    ports:
+      - '12008:12008'
+  match_server:
+    <<: *image
+    command: server matching 12018
+    ports:
+      - '12018:12018'
+  watch_server:
+    <<: *image
+    command: server watch 12080
+    ports:
+      - '12080:12080'
+  db:
+    image: mysql:5.7
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment: *database
+  memcached:
+    image: memcached:1.5.16-alpine

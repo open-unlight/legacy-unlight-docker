@@ -29,6 +29,7 @@ module Unlight
     password: ENV['DB_PASSWORD'] || 'unlight',
     database: ENV['DB_NAME'] || 'unlight_db',
     encoding: 'utf8',
+    port: (ENV['DB_PORT'] || 3306).to_i,
     max_connections: (ENV['DB_POOL_SIZE'] || 5).to_i,
     loggers: Logger.new(STDOUT)
   }

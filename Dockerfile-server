@@ -1,0 +1,49 @@
+FROM ruby:2.6-alpine
+
+RUN apk --update \
+        add --no-cache \
+        build-base \
+        ca-certificates \
+        zlib-dev \
+        libressl-dev \
+        mariadb-dev \
+        mariadb-client \
+        sqlite \
+        sqlite-dev
+
+# Setup Application
+RUN mkdir -p /app/server \
+            /app/dist
+WORKDIR /app
+
+# Setup Server
+ADD rework/server/Gemfile /app/server
+ADD rework/server/Gemfile.lock /app/server
+RUN cd /app/server && bundle install
+
+# Add Source Files
+ADD src/app /app
+ADD rework/server/ /app/server
+ADD patches/ /app/patches
+ADD bin/ /app/bin
+
+ENV PATH /app/bin:$PATH
+
+# Prepare necessary directory
+RUN mkdir -p /app/server/bin/pids \
+    && mkdir -p /app/client/script/data \
+    && mkdir -p /app/server/data/backup
+
+# Apply patch
+RUN cp /app/server/src/server_ip.rb_orig /app/server/src/server_ip.rb \
+    && cp /app/server/src/constants/locale_constants.rb_sb /app/server/src/constants/locale_constants.rb \
+    # Missing
+    && cp /app/server/src/constants/locale_constants.rb_sb /app/server/src/constants/locale_constants.rb_tcn \
+    && cp /app/server/src/net/crypt.rb_orig /app/server/src/net/crypt.rb
+
+RUN patch -p0 < patches/import_csv_data.rb.patch \
+    && patch -p0 < patches/constants.rb.patch \
+    # For run server inside docker
+    && patch -p0 < patches/server.patch \
+    # For direct test game
+    && patch -p0 < patches/disable_server_encrypt.patch \
