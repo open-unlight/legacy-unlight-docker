@@ -102,7 +102,7 @@ x-image: &image
 
 And run `make start` to start the new server.
 
-#### Customize MySQL
+##### Customize MySQL
 
 If you plan to use Docker to run your database server and want to change something, add your `.cnf` to `db/conf.d` and restart the database.
 
