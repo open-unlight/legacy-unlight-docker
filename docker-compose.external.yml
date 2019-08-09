@@ -5,6 +5,9 @@ services:
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     env_file:
       - server.env
+    volumes:
+      - './db/data:/var/lib/mysql'
+      - './db/conf.d:/etc/mysql/mysql.conf.d'
   memcached:
     image: memcached:1.5.16-alpine
 

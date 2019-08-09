@@ -33,5 +33,5 @@ restart:
 stop:
 	@bin/unlight stop
 
-db:
+mysql:
 	@bin/unlight exec db mysql -u ${MYSQL_USER} -D ${MYSQL_DATABASE} -p

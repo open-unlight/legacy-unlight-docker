@@ -6,4 +6,7 @@ dist/**/*
 customize/**/*
 docker-compose.custom.yml
 
+# Database
+db/**/*
+
 !.gitkeep
