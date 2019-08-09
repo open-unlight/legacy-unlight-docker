@@ -4,5 +4,6 @@ fonts/*
 # User Defined Content
 dist/**/*
 customize/**/*
+docker-compose.custom.yml
 
 !.gitkeep

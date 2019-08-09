@@ -25,9 +25,9 @@ module Unlight
   #mysql設定のデフォルト
   MYSQL_CONFIG =  {
     host: ENV['DB_HOST'] || 'db',
-    user: ENV['DB_USER'] || 'unlight',
-    password: ENV['DB_PASSWORD'] || 'unlight',
-    database: ENV['DB_NAME'] || 'unlight_db',
+    user: ENV['MYSQL_USER'] || 'unlight',
+    password: ENV['MYSQL_PASSWORD'] || 'unlight',
+    database: ENV['MYSQL_DATABASE'] || 'unlight_db',
     encoding: 'utf8',
     port: (ENV['DB_PORT'] || 3306).to_i,
     max_connections: (ENV['DB_POOL_SIZE'] || 5).to_i,

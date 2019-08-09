@@ -1,0 +1,14 @@
+version: '3.4'
+x-image: &image
+  image: unlight-server
+  env_file:
+    - server.env
+  restart: unless-stopped
+services:
+  <% services.each do |service| %>
+  <%= "#{service.name}_server" %>:
+    <<: *image
+    command: <%= service.command %>
+    ports:
+      - '<%= service.port %>'
+  <% end %>

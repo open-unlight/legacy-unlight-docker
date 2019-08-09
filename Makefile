@@ -1,5 +1,6 @@
-
+# Project Setting
 ROOT_DIR=$(shell pwd)
+-include server.env
 
 builder:
 	echo 'Prepare build environment...'
@@ -17,16 +18,20 @@ server:
 	echo 'Prepare docker image for server...'
 	@docker build -t unlight-server -f Dockerfile-server .
 
-update:
+update: server
 	echo 'Starting import new game data...'
-	@docker-compose run auth_server update
-	@docker-compose rm -f auth_server
+	@bin/unlight up -d db memcached
+	@bin/unlight run auth_server update
+	@bin/unlight rm -f auth_server
 
-start: server
-	@docker-compose up -d
+start:
+	@bin/unlight up -d
+
+restart:
+	@bin/unlight restart
 
 stop:
-	@docker-compose stop
+	@bin/unlight stop
 
 db:
-	@docker-compose exec db mysql -u unlight -D unlight_db -p
+	@bin/unlight exec db mysql -u ${MYSQL_USER} -D ${MYSQL_DATABASE} -p
