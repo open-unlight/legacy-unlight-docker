@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+# -*- coding: utf-8 -*-
+
+require 'find'
+require 'pathname'
+require 'optparse'
+require 'fileutils'
+require 'logger'
+
+LOG = Logger.new(STDOUT)
+opt = OptionParser.new
+
+mode_reg = /_jp.swf/
+root = Dir.pwd
+opt.on('-e', '--english', '英語用') do |v|
+  mode_reg = /_en.swf/ if v
+end
+
+opt.on('-c', '--t_chinese', '繁體中文') do |v|
+  mode_reg = /_ch.swf/ if v
+end
+
+opt.on('-sc', '--s_chinese', '簡體中文') do |v|
+  mode_reg = /_sc.swf/ if v
+end
+
+opt.on('-kr', '--korean', '韓国語') do |v|
+  mode_reg = /_en.swf/ if v
+end
+
+opt.on('-fr', '--french', 'フランス語語') do |v|
+  mode_reg = /_fr.swf/ if v
+end
+
+opt.on('-P', '--path', 'The assets root path') do |v|
+  root = v if v
+end
+
+opt.parse!(ARGV)
+
+Find.find("#{root}/public/image/") do |src|
+  next if File.directory?(src)
+
+  dest = f.gsub(mode_reg, '.swf')
+  LOG.info("Copy from #{src} to #{dest}")
+  FileUtils.copy_entry(src, dest) if f =~ mode_reg
+end
