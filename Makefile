@@ -28,7 +28,7 @@ setup: server update
 
 start:
 	@bin/unlight up -d --scale db=${ENABLE_DB} \
-										 --scale memcached=${ENABLED_MEMCACHED}
+										 --scale memcached=${ENABLE_MEMCACHED}
 
 restart:
 	@bin/unlight restart

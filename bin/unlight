@@ -4,7 +4,7 @@ set -e
 
 export PROJECT_ROOT=$(dirname $(dirname $0))
 
-source ./$PROJECT_ROOT/server.env
+source $PROJECT_ROOT/server.env
 
 if [ ! -f $PROJECT_ROOT/docker-compose.custom.yml ]; then
   echo "version: '3.4'" > $PROJECT_ROOT/docker-compose.custom.yml
