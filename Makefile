@@ -18,14 +18,17 @@ server:
 	echo 'Prepare docker image for server...'
 	@docker build -t unlight-server -f Dockerfile-server .
 
-update: server
+update:
 	echo 'Starting import new game data...'
 	@bin/unlight up -d db memcached
 	@bin/unlight run auth_server update
 	@bin/unlight rm -f auth_server
 
+setup: server update
+
 start:
-	@bin/unlight up -d
+	@bin/unlight up -d --scale db=${ENABLE_DB} \
+										 --scale memcached=${ENABLED_MEMCACHED}
 
 restart:
 	@bin/unlight restart
