@@ -1,0 +1,66 @@
+--- server/src/authentication.rb
++++ server/src/authentication.rb
+@@ -21,7 +21,7 @@ module Unlight
+   $SERVER_NAME = "AUTH_SV#{$SV_PORT}"
+
+   begin
+-    SV_IP = `wget -q -O - ipcheck.ieserver.net -T=3`
++    SV_IP = '0.0.0.0'
+   rescue =>e
+     SERVER_LOG.fatal("GameServer:IP 未設定")
+   end
+--- server/src/chat.rb
++++ server/src/chat.rb
+@@ -20,7 +20,7 @@ module Unlight
+   opt.parse! ARGV
+   $SERVER_NAME = "CHAT_SV#{SV_PORT}"
+   begin
+-    SV_IP = `wget -q -O - ipcheck.ieserver.net -T=3`
++    SV_IP = '0.0.0.0'
+   rescue =>e
+     SERVER_LOG.fatal("GameServer:IP 未設定")
+   end
+--- server/src/global_chat.rb
++++ server/src/global_chat.rb
+@@ -20,7 +20,7 @@ module Unlight
+   opt.parse! ARGV
+   $SERVER_NAME = "GLOBAL_CHAT_SV#{SV_PORT}"
+   begin
+-    SV_IP = `wget -q -O - ipcheck.ieserver.net -T=3`
++    SV_IP = '0.0.0.0'
+   rescue =>e
+     SERVER_LOG.fatal("GlobalChatServer:IP 未設定")
+   end
+--- server/src/raid_chat.rb
++++ server/src/raid_chat.rb
+@@ -20,7 +20,7 @@ module Unlight
+   opt.parse! ARGV
+   $SERVER_NAME = "RAIDCHAT_SV#{SV_PORT}"
+   begin
+-    SV_IP = `wget -q -O - ipcheck.ieserver.net -T=3`
++    SV_IP = '0.0.0.0'
+   rescue =>e
+     SERVER_LOG.fatal("RaidChatServer:IP 未設定")
+   end
+--- server/src/raid_data.rb
++++ server/src/raid_data.rb
+@@ -20,7 +20,7 @@ module Unlight
+   opt.parse! ARGV
+   $SERVER_NAME = "RAIDDATA_SV#{SV_PORT}"
+   begin
+-    SV_IP = `wget -q -O - ipcheck.ieserver.net -T=3`
++    SV_IP = '0.0.0.0'
+   rescue =>e
+     SERVER_LOG.fatal("RaidDataServer:IP 未設定")
+   end
+--- server/src/raid_rank.rb
++++ server/src/raid_rank.rb
+@@ -20,7 +20,7 @@ module Unlight
+   opt.parse! ARGV
+   $SERVER_NAME = "RAIDRANK_SV#{SV_PORT}"
+   begin
+-    SV_IP = `wget -q -O - ipcheck.ieserver.net -T=3`
++    SV_IP = '0.0.0.0'
+   rescue =>e
+     SERVER_LOG.fatal("RaidRankServer:IP 未設定")
+   end

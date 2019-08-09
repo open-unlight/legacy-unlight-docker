@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -e
+echo 'Prepare static assets...'
+cp -r /assets/* /app/client
+/etc/init.d/memcached start
+
+cd /app/server
+# Import Game Data (mysql command must be executed correctly)
+ruby -E UTF-8 script/import_csv_data.rb $LANGUAGE
+# Create constdata_keys_jp.rb
+ruby script/update_const_keys.rb
+# Font SWf is required database backup
+ruby -E UTF-8 script/backup_db.rb
+ruby -E UTF-8 script/create_font_swf.rb -c
+# TODO: _tcn keys is not exists
+cp script/constdata_keys_jp.rb script/constdata_keys_tcn.rb
+
+cd /app/client
+# Initialize
+ruby script/update_version_file.rb
+# Choose to use Traditional Chinese version swf
+ruby script/switch_resorce.rb -c
+# Generate constdata (Required server configure correctly)
+ruby script/create_const_data.rb
+ruby script/dae_converter.rb
+# Generate Unlight.swf
+/usr/lib/flex3/bin/mxmlc ./src/Unlight.mxml
+
+# Copy files to dist
+cd /app/dist
+cp /app/client/src/Unlight.swf .
+cp /app/server/script/normal_index.html ./index.html

@@ -1,0 +1,10 @@
+--- server/script/create_font_swf.rb
++++ server/script/create_font_swf.rb
+@@ -162,6 +162,6 @@ __END__
+ private static const Font:Class;
+ [Embed(source='../data/__FONT_R__', fontName='mincho'__font_UTF_NO__)]
+ private static const Font2:Class;
+-[Embed(source='../data/nbr.otf', fontName='bradley')]
++[Embed(source='../data/nbr.ttf', fontName='bradley')]
+ private static const Font3:Class;
+

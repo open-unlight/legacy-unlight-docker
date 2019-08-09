@@ -1,0 +1,6 @@
+fonts/*
+*.env
+
+# User Defined Content
+dist/
+customize/

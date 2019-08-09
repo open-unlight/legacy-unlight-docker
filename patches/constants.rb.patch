@@ -1,0 +1,20 @@
+--- server/src/constants/constants.rb
++++ server/src/constants/constants.rb
+@@ -382,7 +382,7 @@ module Unlight
+   case STORE_TYPE
+   when :sqlite3
+   # ログレベル
+-    DB_SERVER_LOG = Logger.new(File.dirname(__FILE__).gsub("src/constants","")+"data/#{$SERVER_NAME}_mysqldb.log", 48, 10*1024*1024)
++    DB_SERVER_LOG = Logger.new(STDOUT)
+     DB_SERVER_LOG.level = Logger::DEBUG
+ #    DB = Sequel.connect("sqlite://#{SQLITE3[:DB_File]}", :loggers => [Logger.new(SQLITE3[:LOG_File],3,)])
+     DB = Sequel.connect("sqlite://#{SQLITE3[:DB_File]}", :loggers => [DB_SERVER_LOG])
+@@ -400,7 +400,7 @@ module Unlight
+   end
+
+   # ログの出力先
+-  SERVER_LOG = Logger.new(File.dirname(__FILE__).gsub("src/constants","")+"bin/pids/#{$SERVER_NAME}.log", 128, 10*1024*1024)
++  SERVER_LOG = Logger.new(STDOUT)
+   # ログレベル
+ #  SERVER_LOG.level = Logger::DEBUG
+   SERVER_LOG.level = Logger::INFO

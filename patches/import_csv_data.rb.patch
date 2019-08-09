@@ -1,0 +1,28 @@
+--- server/script/import_csv_data.rb
++++ server/script/import_csv_data.rb
+@@ -35,11 +35,11 @@ if $VER_NUMBERING && $VER_RESTART
+ end
+
+ $arg = ARGV.shift
+-puts "serverに存在するcsvdataでインポートしますか (sb)"+over_text
+-$arg = gets.chomp
++# puts "serverに存在するcsvdataでインポートしますか (sb)"+over_text
++# $arg = gets.chomp
+ @m_set = []
+ LANGUAGE_SET = /_tcn$|_en$|_scn$|_kr$|_fr$|_ina$|_thai$/
+-MESSAGES={ "sb" => "SandBox"}
++MESSAGES={ "sb" => "SandBox", "tcn" => "繁體中文"}
+ DATABASES={
+   "192.168.1.14:5001"=>"SandBox",
+ }
+@@ -147,8 +147,8 @@ unless MESSAGES.key?($arg)
+   exit
+ end
+ db_name = Unlight::MYSQL_CONFIG[:host] == "192.168.1.14" ? DATABASES["#{Unlight::MYSQL_CONFIG[:host]}:#{Unlight::MYSQL_CONFIG[:port]}"] : ""
+-puts "#{MESSAGES[$arg]}版CSVを#{db_name}DBに適用します OK? (y/n)"
+-exit if gets.chomp != 'y'
++# puts "#{MESSAGES[$arg]}版CSVを#{db_name}DBに適用します OK? (y/n)"
++# exit if gets.chomp != 'y'
+
+ print_file_list() if $VER_NUMBERING || $VER_RESTART
+

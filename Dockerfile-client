@@ -1,0 +1,75 @@
+FROM ubuntu:xenial
+
+# Install Dependencies
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update \
+    && apt-get install -y  --no-install-recommends \
+            git \
+            default-jdk \
+            ruby \
+            ruby-dev \
+            memcached \
+            mysql-client \
+            libmysqlclient-dev \
+            ant \
+            unzip \
+            curl \
+            build-essential \
+            sqlite3 \
+            libsqlite3-dev \
+    && apt-get purge -y --auto-remove \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+              /tmp/*
+
+RUN gem install bundler
+
+# Setup Application
+RUN mkdir -p /app/server \
+            /app/client \
+            /app/dist
+WORKDIR /app
+
+# Setup Server
+ADD src/app/server/Gemfile /app/server
+RUN cd /app/server && bundle install
+
+# Setup Flex
+ENV FLEXSDK_VERSION 3.6a
+RUN curl -fL -o /tmp/flexsdk.zip http://download.macromedia.com/pub/flex/sdk/flex_sdk_${FLEXSDK_VERSION}.zip \
+    && unzip /tmp/flexsdk.zip -d /usr/lib/flex3 \
+    && rm -rf /tmp/*
+
+# Add Source Files
+ADD src/app /app
+ADD rework/ /app
+ADD fonts/* /app/client/data/
+ADD patches/ /app/patches
+ADD bin/ /app/bin
+
+ENV PATH /app/bin:$PATH
+
+# Prepare necessary directory
+RUN mkdir -p /app/server/bin/pids \
+    && mkdir -p /app/client/script/data \
+    && mkdir -p /app/server/data/backup
+
+# Apply patch
+RUN cp /app/server/src/server_ip.rb_orig /app/server/src/server_ip.rb \
+    && cp /app/server/src/constants/locale_constants.rb_sb /app/server/src/constants/locale_constants.rb \
+    # Missing
+    && cp /app/server/src/constants/locale_constants.rb_sb /app/server/src/constants/locale_constants.rb_tcn \
+    && cp /app/server/src/net/crypt.rb_orig /app/server/src/net/crypt.rb \
+    && cp /app/client/src/Unlight-config_sandbox.xml /app/client/src/Unlight-config.xml
+
+RUN patch -p0 < patches/import_csv_data.rb.patch \
+    && patch -p0 < patches/create_const_data.rb.patch \
+    && patch -p0 < patches/Unlight-config.xml.patch \
+    && patch -p0 < patches/create_font_swf.rb.patch \
+    && patch -p0 < patches/constants.rb.patch \
+    # For run server inside docker
+    && patch -p0 < patches/server.patch \
+    # For direct test game
+    && patch -p0 < patches/disable_encrypt.patch \
+    # For compile client with SQLite
+    && patch -p0 < patches/compile/create_const_data.rb.patch

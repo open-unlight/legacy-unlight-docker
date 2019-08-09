@@ -1,0 +1,18 @@
+--- client/script/create_const_data.rb
++++ client/script/create_const_data.rb
+@@ -142,7 +142,7 @@
+     a << "],\n"
+     tsv << a
+   end
+-  tsv.chop!.chop!
++  tsv.chop!&.chop!
+ end
+
+ def get_data_csv_str(dataset)
+@@ -154,7 +154,7 @@
+     a << "],\n"
+     tsv << a
+   end
+-  tsv.chop!.chop!
++  tsv.chop!&.chop!
+ end

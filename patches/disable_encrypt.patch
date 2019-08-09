@@ -1,0 +1,123 @@
+--- client/src/net/Crypt.as
++++ client/src/net/Crypt.as
+@@ -48,8 +48,8 @@ package net
+ //                 throw new Error("Invalid SessinoID. not length 20. get length " + s.length);
+ //             }
+             sessionID = s
+-            encrypt = toCryptedCmd;
+-            decrypt = fromCryptedCmd;
++            // encrypt = toCryptedCmd;
++            // decrypt = fromCryptedCmd;
+         }
+
+         /**
+@@ -103,4 +103,4 @@ package net
+             return str_a;
+         }
+     }
+-}
+\ No newline at end of file
++}
+--- client/src/net/server/AuthServer.as
++++ client/src/net/server/AuthServer.as
+@@ -375,21 +375,24 @@ package net.server
+
+             // コマンドの合否を調べる
+             // 成功のイベントを創出
+-            if (srp.getCert(pub_key, matcher, strong_key) == cert)
+-            {
+-                log.writeLog(log.LV_INFO, this, "cert ok ", cert);
+-                player.loginSuccess(i,strong_key);
+-
+-                ClientLog.init(i); // ログクライアントの初期化
+-//                host.setSessionKey(strong_key);
+-            }
+-            else
+-            // 失敗の場合サーバ無効のイベントを送出してホストと切断
+-            {
+-                host.close();
+-                log.writeLog(log.LV_FATAL, "AuthServer.as", "Invalid Server! ");
+-                player.loginFailed();
+-            }
++            // if (srp.getCert(pub_key, matcher, strong_key) == cert)
++            // {
++            //     log.writeLog(log.LV_INFO, this, "cert ok ", cert);
++            //     player.loginSuccess(i,strong_key);
++
++            //     ClientLog.init(i); // ログクライアントの初期化
++//          //       host.setSessionKey(strong_key);
++            // }
++            // else
++            // // 失敗の場合サーバ無効のイベントを送出してホストと切断
++            // {
++            //     host.close();
++            //     log.writeLog(log.LV_FATAL, "AuthServer.as", "Invalid Server! ");
++            //     player.loginFailed();
++            // }
++          player.loginSuccess(i,strong_key);
++          ClientLog.init(i); // ログクライアントの初期化
++          host.setSessionKey(strong_key);
+         }
+
+         /**
+@@ -491,4 +494,4 @@ package net.server
+         }
+
+     }
+-}
+\ No newline at end of file
++}
+--- server/src/protocol/authserver.rb
++++ server/src/protocol/authserver.rb
+@@ -81,22 +81,23 @@ module Unlight
+         m = @@srp.get_matcher(@c_pub, @pub, @player.name, @salt, @strong_key)
+         # 認証に成功
+
+-        if matcher == m
+-          # 現在の状態は？
+-          if @player.auth?
+-            # 認証中なら
+-            cert(m)
+-          else
+-            SERVER_LOG.info("#{@@class_name}: [auth_fail] no Auth #{@player.name}")
+-            auth_fail
+-          end
+-        else
+-          # 認証に失敗（パスワードが異なる
+-          SERVER_LOG.info("#{@@class_name}: [auth_fail] wrong pass #{@player.name}")
+-          @player.pass_failed
+-          # 再レジスト要求
+-          sc_request_reregist
+-        end
++        cert(m)
++        # if matcher == m
++        #   # 現在の状態は？
++        #   if @player.auth?
++        #     # 認証中なら
++        #     cert(m)
++        #   else
++        #     SERVER_LOG.info("#{@@class_name}: [auth_fail] no Auth #{@player.name}")
++        #     auth_fail
++        #   end
++        # else
++        #   # 認証に失敗（パスワードが異なる
++        #   SERVER_LOG.info("#{@@class_name}: [auth_fail] wrong pass #{@player.name}")
++        #   @player.pass_failed
++        #   # 再レジスト要求
++        #   sc_request_reregist
++        # end
+       end
+
+
+--- server/src/protocol/ulserver.rb
++++ server/src/protocol/ulserver.rb
+@@ -67,7 +67,8 @@ module Unlight
+
+       # セッションキーを設定して暗号化をONにする
+       def set_session_key(sID)
+-        @crypt = Crypt::XOR.new(sID)
++        # @crypt = Crypt::XOR.new(sID)
++        @crypt = Crypt::None.new
+       end
+
+       # セッションキーを解除して暗号化をOFFにする

@@ -1,0 +1,33 @@
+--- client/src/Unlight-config.xml
++++ client/src/Unlight-config.xml
+@@ -2,9 +2,9 @@
+ <flex-config>
+    <target-player>10.0.12</target-player>
+ <compiler>
+-  <external-library-path>
+-    <path-element>../lib/as3crypto.swc</path-element>
+-  </external-library-path>
++  <include-libraries>
++    <library>../lib/as3crypto.swc</library>
++  </include-libraries>
+   <source-path>
+     <path-element>.</path-element>
+     <path-element>../lib</path-element>
+@@ -56,7 +56,7 @@
+   </define>
+   <define>
+     <name>CONFIG::LOCALE_JP</name>
+-    <value>true</value>
++    <value>false</value>
+   </define>
+   <define>
+     <name>CONFIG::LOCALE_EN</name>
+@@ -68,7 +68,7 @@
+   </define>
+   <define>
+     <name>CONFIG::LOCALE_TCN</name>
+-    <value>false</value>
++    <value>true</value>
+   </define>
+   <define>
+     <name>CONFIG::LOCALE_SCN</name>

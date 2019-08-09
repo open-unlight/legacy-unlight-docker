@@ -1,0 +1,36 @@
+--- client/script/create_const_data.rb
++++ client/script/create_const_data.rb
+@@ -30,18 +30,21 @@ module Unlight
+     end
+     $encrypt_on = true
+   end
+-  DB = Sequel.mysql2(nil,MYSQL_CONFIG)
+-
+-  MYSQL_CONFIG =  {
+-    :host =>"db",
+-    :user => "unlight",
+-    :password =>"unlight",
+-    :database =>"unlight_db",
+-    :encoding => 'utf8',
+-    :max_connections => 5,
+-    :loggers => Logger.new(File.dirname(__FILE__).gsub("src","")+"/data/#{$SERVER_NAME}_mysqldb.log", 32, 10*1024*1024)
+-  }
+-  DB = Sequel.mysql2(nil,MYSQL_CONFIG)
++  DB_SERVER_LOG = Logger.new(File.dirname(__FILE__).gsub("src/constants","")+"/data/#{$SERVER_NAME}_mysqldb.log", 48, 10*1024*1024)
++  DB_SERVER_LOG.level = Logger::DEBUG
++  DB = Sequel.connect("sqlite://#{SQLITE3[:DB_File]}", :loggers => [DB_SERVER_LOG])
++  # DB = Sequel.mysql2(nil,MYSQL_CONFIG)
++
++  # MYSQL_CONFIG =  {
++  #   :host =>"db",
++  #   :user => "unlight",
++  #   :password =>"unlight",
++  #   :database =>"unlight_db",
++  #   :encoding => 'utf8',
++  #   :max_connections => 5,
++  #   :loggers => Logger.new(File.dirname(__FILE__).gsub("src","")+"/data/#{$SERVER_NAME}_mysqldb.log", 32, 10*1024*1024)
++  # }
++  # DB = Sequel.mysql2(nil,MYSQL_CONFIG)
+
+   opt.on('-s',"--sandbox","sandboxを作る") do |v|
+     if v
