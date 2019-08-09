@@ -34,7 +34,7 @@ opt.on('-fr', '--french', 'フランス語語') do |v|
   mode_reg = /_fr.swf/ if v
 end
 
-opt.on('-P', '--path', 'The assets root path') do |v|
+opt.on('-P', '--path WEBROOT', 'The assets root path') do |v|
   root = v if v
 end
 
@@ -43,7 +43,7 @@ opt.parse!(ARGV)
 Find.find("#{root}/public/image/") do |src|
   next if File.directory?(src)
 
-  dest = f.gsub(mode_reg, '.swf')
+  dest = src.gsub(mode_reg, '.swf')
   LOG.info("Copy from #{src} to #{dest}")
-  FileUtils.copy_entry(src, dest) if f =~ mode_reg
+  FileUtils.copy_entry(src, dest) if src =~ mode_reg
 end
