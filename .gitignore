@@ -10,3 +10,4 @@ docker-compose.custom.yml
 db/**/*
 
 !.gitkeep
+.DS_Store

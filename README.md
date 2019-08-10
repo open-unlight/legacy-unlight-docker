@@ -10,6 +10,7 @@ This repository provides a pre-package docker image for compile client (SWF) and
 * Docker Compose 1.24+
 * git 2+
 * make
+* Ruby 2.6+
 
 ## Install
 

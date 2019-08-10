@@ -10,6 +10,7 @@ CPA 釋出了 Unlight's [原始碼](https://github.com/unlightcpa/Unlight) 但�
 * Docker Compose 1.24+
 * git 2+
 * make
+* Ruby 2.6+
 
 ## 安裝
 
