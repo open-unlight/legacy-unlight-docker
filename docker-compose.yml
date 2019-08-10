@@ -4,6 +4,9 @@ x-image: &image
   env_file:
     - server.env
   restart: unless-stopped
+  depends_on:
+    - memcached
+    - db
 services:
   xmlsocket:
     <<: *image

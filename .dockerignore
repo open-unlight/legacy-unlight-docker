@@ -1,2 +1,4 @@
 assets/
+dist/
+db/
 .git/

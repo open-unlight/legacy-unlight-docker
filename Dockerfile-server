@@ -17,9 +17,8 @@ RUN mkdir -p /app/server \
 WORKDIR /app
 
 # Setup Server
-ADD rework/server/Gemfile /app/server
-ADD rework/server/Gemfile.lock /app/server
-RUN cd /app/server && bundle install
+COPY rework/server/Gemfile* customize/server/Gemfile* /app/server/
+RUN cd /app/server && bundle install --no-cache
 
 # Add Source Files
 ADD src/app /app
@@ -46,4 +45,8 @@ RUN patch -p0 < patches/import_csv_data.rb.patch \
     # For run server inside docker
     && patch -p0 < patches/server.patch \
     # For direct test game
-    && patch -p0 < patches/disable_server_encrypt.patch \
+    && patch -p0 < patches/disable_server_encrypt.patch
+
+# Add user customize content
+ADD customize/ /app
+RUN if [[ -f /app/bin/customize ]]; then customize; fi

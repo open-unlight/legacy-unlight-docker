@@ -31,7 +31,7 @@ RUN mkdir -p /app/server \
 WORKDIR /app
 
 # Setup Server
-ADD src/app/server/Gemfile /app/server
+COPY rework/server/Gemfile* customize/server/Gemfile* /app/server/
 RUN cd /app/server && bundle install
 
 # Setup Flex
@@ -73,3 +73,7 @@ RUN patch -p0 < patches/import_csv_data.rb.patch \
     && patch -p0 < patches/disable_encrypt.patch \
     # For compile client with SQLite
     && patch -p0 < patches/compile/create_const_data.rb.patch
+
+# Add user customize content
+ADD customize/ /app
+RUN if [[ -f /app/bin/customize ]]; then customize; fi
