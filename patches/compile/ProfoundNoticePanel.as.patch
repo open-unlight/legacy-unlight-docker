@@ -1,0 +1,11 @@
+--- client/src/view/scene/raid/ProfoundNoticePanel.as
++++ client/src/view/scene/raid/ProfoundNoticePanel.as
+@@ -260,7 +260,7 @@ package view.scene.raid
+                 hide();
+                 var num:int = ProfoundNotice.getNoticeNum();
+                 if (num>0)
+-                {LobbyCtrl.instance.profoundNoticeClear(num);}
++                {RaidDataCtrl.instance.profoundNoticeClear(num);}
+             }
+             return ret;
+         }
