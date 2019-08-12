@@ -70,7 +70,7 @@ RUN patch -p0 < patches/import_csv_data.rb.patch \
     # For run server inside docker
     && patch -p0 < patches/server.patch \
     # For direct test game
-    && patch -p0 < patches/disable_encrypt.patch \
+    # && patch -p0 < patches/disable_encrypt.patch \
     # For compile client with SQLite
     && patch -p0 < patches/compile/create_const_data.rb.patch
 

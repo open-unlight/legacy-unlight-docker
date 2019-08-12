@@ -43,9 +43,9 @@ RUN cp /app/server/src/server_ip.rb_orig /app/server/src/server_ip.rb \
 RUN patch -p0 < patches/import_csv_data.rb.patch \
     && patch -p0 < patches/constants.rb.patch \
     # For run server inside docker
-    && patch -p0 < patches/server.patch \
+    && patch -p0 < patches/server.patch
     # For direct test game
-    && patch -p0 < patches/disable_server_encrypt.patch
+    # && patch -p0 < patches/disable_server_encrypt.patch
 
 # Add user customize content
 ADD customize/ /app
