@@ -3,7 +3,7 @@ ROOT_DIR=$(shell pwd)
 -include server.env
 
 builder:
-	echo 'Prepare build environment...'
+	@echo 'Prepare build environment...'
 	@docker build -q -t unlight-client -f Dockerfile-client .
 
 Unlight.swf:
@@ -15,11 +15,11 @@ Unlight.swf:
 client: builder Unlight.swf
 
 server:
-	echo 'Prepare docker image for server...'
+	@echo 'Prepare docker image for server...'
 	@docker build -t unlight-server -f Dockerfile-server .
 
 update:
-	echo 'Starting import new game data...'
+	@echo 'Starting import new game data...'
 	@bin/unlight up -d db memcached
 	@bin/unlight run auth_server update
 	@bin/unlight rm -f auth_server
