@@ -1,0 +1,51 @@
+--- client/src/view/scene/game/DeckArea.as
++++ client/src/view/scene/game/DeckArea.as
+@@ -125,7 +125,7 @@ package view.scene.game
+             if (_num > 0)
+             {
+                 _num -= 1;
+-                sExec.addThread(new TweenerThread(_label, {_text:_num.toString(), delay:wait*_DEC_WAIT+0.01} ));
++                sExec.addThread(new TweenerThread(_label, {text:_num.toString(), delay:wait*_DEC_WAIT+0.01} ));
+                 sExec.addThread(new ClousureThread(_deck.dec));
+             }
+             return  sExec;
+@@ -135,7 +135,7 @@ package view.scene.game
+         {
+             _num += 1;
+             var sExec:SerialExecutor = new SerialExecutor();
+-            sExec.addThread(new TweenerThread(_label, { _text:_num.toString(), delay:wait*_INC_WAIT+0.01} ));
++            sExec.addThread(new TweenerThread(_label, { text:_num.toString(), delay:wait*_INC_WAIT+0.01} ));
+             sExec.addThread(new ClousureThread(_deck.inc));
+             return  sExec;
+         }
+--- client/src/view/scene/game/PositionArea.as
++++ client/src/view/scene/game/PositionArea.as
+@@ -349,7 +349,7 @@ class ThruPositionThread extends Thread
+     {
+         _panel.visible = true;
+ //        var textTween:Thread = new TweenerThread(_label, { _text: "移動ポイント０のため移動はありません", delay:0.2, transition:"easeOutSine", time: 1.0} );
+-        var textTween:Thread = new TweenerThread(_label, { _text: _TRANS_MSG_NOMOVE, delay:0.2, transition:"easeOutSine", time: 1.0} );
++        var textTween:Thread = new TweenerThread(_label, { text: _TRANS_MSG_NOMOVE, delay:0.2, transition:"easeOutSine", time: 1.0} );
+         _label.text = "";
+         textTween.start();
+         textTween.join();
+@@ -416,7 +416,7 @@ class OnWaitingThread extends Thread
+     private function repeat():void
+     {
+ //        var textTween:Thread = new TweenerThread(_label, { _text: "相手プレイヤの移動を待っています", delay:0.2, transition:"easeOutSine", time: 1.0} );
+-        var textTween:Thread = new TweenerThread(_label, { _text: _TRANS_MSG_WAIT, delay:0.2, transition:"easeOutSine", time: 1.0} );
++        var textTween:Thread = new TweenerThread(_label, { text: _TRANS_MSG_WAIT, delay:0.2, transition:"easeOutSine", time: 1.0} );
+         _label.text = "";
+         textTween.start();
+ //        event(_duel, Duel.MOVE_PHASE_FINISH,finish);
+--- client/src/view/utils/WaitingPanel.as
++++ client/src/view/utils/WaitingPanel.as
+@@ -186,7 +186,7 @@ class TextUpdateThread extends Thread
+
+     private function updateText():void
+     {
+-            var textTween:Thread = new TweenerThread(_label, { _text: _content, delay:0.1, transition:"easeOutSine", time: 0.5} );
++            var textTween:Thread = new TweenerThread(_label, { text: _content, delay:0.1, transition:"easeOutSine", time: 0.5} );
+             _label.text = "";
+             textTween.start();
+             textTween.join();
