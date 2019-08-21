@@ -1,0 +1,22 @@
+--- client/src/view/MainView.as
++++ client/src/view/MainView.as
+@@ -15,6 +15,9 @@ package view
+
+     import view.RaidHelpView;
+
++    import caurina.transitions.properties.TextShortcuts;
++    import caurina.transitions.properties.DisplayShortcuts;
++
+
+     /**
+      * メインのビュークラス
+@@ -49,6 +52,9 @@ package view
+             _container.addChildAt(_bg,0);
+             _stage.addChildAt(_container,0);
+             log.writeLog(log.LV_INFO, this, "Main Finish");
++
++            TextShortcuts.init();
++            DisplayShortcuts.init();
+         }
+
+         // スレッドのスタート
