@@ -38,6 +38,11 @@ services:
     command: server matching 12018
     ports:
       - '12018:12018'
+  chat_server:
+    <<: *image
+    command: server chat 12012
+    ports:
+      - '12012:12012'
   global_chat_server:
     <<: *image
     command: server global_chat 12020
