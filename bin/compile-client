@@ -14,7 +14,7 @@ ruby script/update_const_keys.rb
 ruby -E UTF-8 script/backup_db.rb
 ruby -E UTF-8 script/create_font_swf.rb -c
 # TODO: _tcn keys is not exists
-cp script/constdata_keys_jp.rb script/constdata_keys_tcn.rb
+cp script/constdata_keys_jp.rb script/constdata_keys_$LANGUAGE.rb
 
 cd /app/client
 # Initialize
