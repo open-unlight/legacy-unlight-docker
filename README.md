@@ -1,7 +1,7 @@
 Legacy Unlight Docker
 ===
 
-[![](https://images.microbadger.com/badges/image/openunlight/legacy-server.svg)](https://microbadger.com/images/openunlight/legacy-server "Get your own image badge on microbadger.com")[![](https://images.microbadger.com/badges/version/openunlight/legacy-server.svg)](https://microbadger.com/images/openunlight/legacy-server "Get your own version badge on microbadger.com")[![Docker Repository on Quay](https://quay.io/repository/open-unlight/legacy-server/status "Docker Repository on Quay")](https://quay.io/repository/open-unlight/legacy-server)
+[![](https://images.microbadger.com/badges/image/openunlight/legacy-server.svg)](https://microbadger.com/images/openunlight/legacy-server "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/openunlight/legacy-server.svg)](https://microbadger.com/images/openunlight/legacy-server "Get your own version badge on microbadger.com") [![Docker Repository on Quay](https://quay.io/repository/open-unlight/legacy-server/status "Docker Repository on Quay")](https://quay.io/repository/open-unlight/legacy-server)
 
 The CPA is released Unlight's [source code](https://github.com/unlightcpa/Unlight) but there is no any document and stable version for setup.
 This repository provides a pre-package docker image for compile client (SWF) and server (Ruby) and lets anyone can serve their Unlight server.
@@ -84,6 +84,21 @@ bin/prepare-assets --t_chinese -P dist/
 ```
 
 > The `dist/` directory is your web server root folder includes Unlight's `public/` directory. This will change SWF to your locale.
+
+#### Pre-build Image
+
+We also provide pre-build image and allow you setup server without build it by yourself.
+
+```yaml
+x-image: &image
+  image: openunlight/legacy-server:latest # Change this line
+  env_file:
+    - server.env
+  restart: unless-stopped
+  depends_on:
+    - memcached
+    - db
+```
 
 ##### Customize Docker
 
