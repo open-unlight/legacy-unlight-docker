@@ -100,7 +100,7 @@ x-image: &image
     - db
 ```
 
-##### Customize Docker
+#### Customize Docker
 
 The Docker Compose's scale feature will break our services, please add your external server to `docker-compose.custom.yml`
 
