@@ -5,7 +5,7 @@
 
    begin
 -    SV_IP = `wget -q -O - ipcheck.ieserver.net -T=3`
-+    SV_IP = '0.0.0.0'
++    SV_IP = ENV['SV_IP'] || '0.0.0.0'
    rescue =>e
      SERVER_LOG.fatal("GameServer:IP 未設定")
    end
@@ -16,7 +16,7 @@
    $SERVER_NAME = "CHAT_SV#{SV_PORT}"
    begin
 -    SV_IP = `wget -q -O - ipcheck.ieserver.net -T=3`
-+    SV_IP = '0.0.0.0'
++    SV_IP = ENV['SV_IP'] || '0.0.0.0'
    rescue =>e
      SERVER_LOG.fatal("GameServer:IP 未設定")
    end
@@ -27,7 +27,7 @@
    $SERVER_NAME = "GLOBAL_CHAT_SV#{SV_PORT}"
    begin
 -    SV_IP = `wget -q -O - ipcheck.ieserver.net -T=3`
-+    SV_IP = '0.0.0.0'
++    SV_IP = ENV['SV_IP'] || '0.0.0.0'
    rescue =>e
      SERVER_LOG.fatal("GlobalChatServer:IP 未設定")
    end
@@ -38,7 +38,7 @@
    $SERVER_NAME = "RAIDCHAT_SV#{SV_PORT}"
    begin
 -    SV_IP = `wget -q -O - ipcheck.ieserver.net -T=3`
-+    SV_IP = '0.0.0.0'
++    SV_IP = ENV['SV_IP'] || '0.0.0.0'
    rescue =>e
      SERVER_LOG.fatal("RaidChatServer:IP 未設定")
    end
@@ -49,7 +49,7 @@
    $SERVER_NAME = "RAIDDATA_SV#{SV_PORT}"
    begin
 -    SV_IP = `wget -q -O - ipcheck.ieserver.net -T=3`
-+    SV_IP = '0.0.0.0'
++    SV_IP = ENV['SV_IP'] || '0.0.0.0'
    rescue =>e
      SERVER_LOG.fatal("RaidDataServer:IP 未設定")
    end
@@ -60,7 +60,7 @@
    $SERVER_NAME = "RAIDRANK_SV#{SV_PORT}"
    begin
 -    SV_IP = `wget -q -O - ipcheck.ieserver.net -T=3`
-+    SV_IP = '0.0.0.0'
++    SV_IP = ENV['SV_IP'] || '0.0.0.0'
    rescue =>e
      SERVER_LOG.fatal("RaidRankServer:IP 未設定")
    end
