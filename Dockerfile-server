@@ -1,4 +1,6 @@
-FROM ruby:2.6-alpine
+
+# Pre-compile Gems
+FROM ruby:2.6-alpine AS gem
 
 RUN apk --update \
         add --no-cache \
@@ -12,33 +14,62 @@ RUN apk --update \
         sqlite-dev
 
 # Setup Application
-RUN mkdir -p /app/server \
-            /app/dist
-WORKDIR /app
+ARG APP_ROOT=/app
+ENV APP_ROOT=${APP_ROOT}
+RUN mkdir -p $APP_ROOT/server \
+             $APP_ROOT/dist
 
-# Setup Server
-COPY rework/server/Gemfile* customize/server/Gemfile* /app/server/
-RUN cd /app/server && bundle install --no-cache
+WORKDIR $APP_ROOT/
+
+COPY rework/server/Gemfile* customize/server/Gemfile* $APP_ROOT/server/
+RUN cd $APP_ROOT/server \
+    && bundle install --deployment --no-cache \
+    && rm -rf vendor/bundle/ruby/**/cache
+
+# Server
+FROM ruby:2.6.3-alpine
+
+RUN apk --update \
+        add --no-cache \
+        gcc \
+        libc-dev \
+        ca-certificates \
+        zlib-dev \
+        libressl-dev \
+        mariadb-connector-c \
+        mariadb-client \
+        sqlite
+
+ARG APP_ROOT=/app
+ENV APP_ROOT=${APP_ROOT}
+
+# Setup Application
+RUN mkdir -p $APP_ROOT/server \
+             $APP_ROOT/dist
+WORKDIR $APP_ROOT/
+
+COPY --from=gem $APP_ROOT/server/vendor/bundle $APP_ROOT/server/vendor/bundle
+COPY --from=gem /usr/local/bundle/config /usr/local/bundle/config
 
 # Add Source Files
-ADD src/app /app
-ADD rework/server/ /app/server
-ADD patches/ /app/patches
-ADD bin/ /app/bin
+ADD src/app/server/ $APP_ROOT/server
+ADD rework/server/ $APP_ROOT/server
+ADD patches/ $APP_ROOT/patches
+ADD bin/ $APP_ROOT/bin
 
-ENV PATH /app/bin:$PATH
+ENV PATH $APP_ROOT/bin:$PATH
 
 # Prepare necessary directory
-RUN mkdir -p /app/server/bin/pids \
-    && mkdir -p /app/client/script/data \
-    && mkdir -p /app/server/data/backup
+RUN mkdir -p $APP_ROOT/server/bin/pids \
+    && mkdir -p $APP_ROOT/client/script/data \
+    && mkdir -p $APP_ROOT/server/data/backup
 
 # Apply patch
-RUN cp /app/server/src/server_ip.rb_orig /app/server/src/server_ip.rb \
-    && cp /app/server/src/constants/locale_constants.rb_sb /app/server/src/constants/locale_constants.rb \
+RUN cp $APP_ROOT/server/src/server_ip.rb_orig $APP_ROOT/server/src/server_ip.rb \
+    && cp $APP_ROOT/server/src/constants/locale_constants.rb_sb $APP_ROOT/server/src/constants/locale_constants.rb \
     # Missing
-    && cp /app/server/src/constants/locale_constants.rb_sb /app/server/src/constants/locale_constants.rb_tcn \
-    && cp /app/server/src/net/crypt.rb_orig /app/server/src/net/crypt.rb
+    && cp $APP_ROOT/server/src/constants/locale_constants.rb_sb $APP_ROOT/server/src/constants/locale_constants.rb_tcn \
+    && cp $APP_ROOT/server/src/net/crypt.rb_orig $APP_ROOT/server/src/net/crypt.rb
 
 RUN patch -p0 < patches/import_csv_data.rb.patch \
     && patch -p0 < patches/constants.rb.patch \
@@ -48,5 +79,5 @@ RUN patch -p0 < patches/import_csv_data.rb.patch \
     && patch -p0 < patches/disable_server_encrypt.patch
 
 # Add user customize content
-ADD customize/ /app
-RUN if [[ -f /app/bin/customize ]]; then customize; fi
+ADD customize/ $APP_ROOT
+RUN if [[ -f $APP_ROOT/bin/customize ]]; then customize; fi

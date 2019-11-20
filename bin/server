@@ -5,9 +5,9 @@ wait-db
 
 cd /app/server
 # Create constdata_keys_jp.rb
-ruby script/update_const_keys.rb
+bundle exec ruby script/update_const_keys.rb
 # TODO: constdata_keys.rb not exists
 cp script/constdata_keys_jp.rb script/constdata_keys.rb
 
 # Start server
-ruby -roptparse src/$1.rb -p $2
+bundle exec ruby -roptparse src/$1.rb -p $2
