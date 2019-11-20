@@ -11,6 +11,7 @@ RUN apt-get update \
             memcached \
             mysql-client \
             libmysqlclient-dev \
+            libssl-dev \
             ant \
             unzip \
             curl \
