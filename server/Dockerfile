@@ -18,12 +18,13 @@ RUN apk --update \
 # Setup Application
 ARG APP_ROOT
 ENV APP_ROOT=${APP_ROOT}
-RUN mkdir -p $APP_ROOT/server
+ENV SERVER_ROOT=$APP_ROOT/server
 
-WORKDIR $APP_ROOT/
+RUN mkdir -p $SERVER_ROOT
+WORKDIR $SERVER_ROOT
 
-COPY server/Gemfile* $APP_ROOT/server/
-RUN cd $APP_ROOT/server \
+COPY server/Gemfile* $SERVER_ROOT/
+RUN cd $SERVER_ROOT \
     && bundle install --deployment --no-cache --without development \
     && rm -rf vendor/bundle/ruby/**/cache
 
@@ -43,34 +44,24 @@ RUN apk --update \
 
 ARG APP_ROOT
 ENV APP_ROOT=${APP_ROOT}
+ENV SERVER_ROOT=$APP_ROOT/server
 
 # Setup Application
-RUN mkdir -p $APP_ROOT/server \
-      && mkdir -p $APP_ROOT/server/bin/pids \
-      && mkdir -p $APP_ROOT/server/data/backup
-
+RUN mkdir -p $SERVER_ROOT \
+      && mkdir -p $SERVER_ROOT/bin/pids \
+      && mkdir -p $SERVER_ROOT/data/backup
 WORKDIR $APP_ROOT/
 
-COPY --from=gem $APP_ROOT/server/vendor/bundle $APP_ROOT/server/vendor/bundle
+COPY --from=gem $SERVER_ROOT/vendor/bundle $SERVER_ROOT/vendor/bundle
 COPY --from=gem /usr/local/bundle/config /usr/local/bundle/config
 
 # Add Source Files
-ADD src/app/server/ $APP_ROOT/server
-ADD server/ $APP_ROOT/server
+ADD src/app/server/ $SERVER_ROOT
+ADD server/ $SERVER_ROOT
 ADD patches/ $APP_ROOT/patches
 
-ENV PATH $APP_ROOT/server/bin:$PATH
+ENV PATH $SERVER_ROOT/bin:$PATH
 
-# Apply patch
-RUN cp $APP_ROOT/server/src/server_ip.rb_orig $APP_ROOT/server/src/server_ip.rb \
-    && cp $APP_ROOT/server/src/constants/locale_constants.rb_sb $APP_ROOT/server/src/constants/locale_constants.rb \
-    # Missing
-    && cp $APP_ROOT/server/src/constants/locale_constants.rb_sb $APP_ROOT/server/src/constants/locale_constants.rb_tcn \
-    && cp $APP_ROOT/server/src/net/crypt.rb_orig $APP_ROOT/server/src/net/crypt.rb
-
-RUN patch -p0 < patches/import_csv_data.rb.patch \
-    && patch -p0 < patches/constants.rb.patch \
-    # For run server inside docker
-    && patch -p0 < patches/server.patch \
-    # For direct test game
-    && patch -p0 < patches/disable_server_encrypt.patch
+# Patch for Dockerize
+RUN sh $SERVER_ROOT/scripts/prepare.sh \
+    && sh $SERVER_ROOT/scripts/patch.sh
