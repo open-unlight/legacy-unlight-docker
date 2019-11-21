@@ -2,9 +2,11 @@
 ROOT_DIR=$(shell pwd)
 -include server.env
 
+.PHONY: server client
+
 builder:
 	@echo 'Prepare build environment...'
-	@docker build -q -t unlight-client -f Dockerfile-client .
+	@docker build -q -t unlight-client -f client/Dockerfile .
 
 Unlight.swf:
 	@docker run --rm -v ${ROOT_DIR}/assets:/assets \
@@ -16,7 +18,7 @@ client: builder Unlight.swf
 
 server:
 	@echo 'Prepare docker image for server...'
-	@docker build -t unlight-server -f Dockerfile-server .
+	@docker build -t unlight-server -f server/Dockerfile .
 
 update:
 	@echo 'Starting import new game data...'

@@ -22,7 +22,7 @@ RUN mkdir -p $APP_ROOT/server
 
 WORKDIR $APP_ROOT/
 
-COPY rework/server/Gemfile* $APP_ROOT/server/
+COPY server/Gemfile* $APP_ROOT/server/
 RUN cd $APP_ROOT/server \
     && bundle install --deployment --no-cache --without development \
     && rm -rf vendor/bundle/ruby/**/cache
@@ -56,7 +56,7 @@ COPY --from=gem /usr/local/bundle/config /usr/local/bundle/config
 
 # Add Source Files
 ADD src/app/server/ $APP_ROOT/server
-ADD rework/server/ $APP_ROOT/server
+ADD server/ $APP_ROOT/server
 ADD patches/ $APP_ROOT/patches
 ADD bin/ $APP_ROOT/bin
 

@@ -32,7 +32,7 @@ RUN mkdir -p /app/server \
 WORKDIR /app
 
 # Setup Server
-COPY rework/server/Gemfile* customize/server/Gemfile* /app/server/
+COPY server/Gemfile* /app/server/
 RUN cd /app/server && bundle install
 
 # Setup Flex
@@ -43,7 +43,8 @@ RUN curl -fL -o /tmp/flexsdk.zip http://download.macromedia.com/pub/flex/sdk/fle
 
 # Add Source Files
 ADD src/app /app
-ADD rework/ /app
+ADD server/ /app/server
+ADD client/ /app/client
 ADD fonts/* /app/client/data/
 ADD patches/ /app/patches
 ADD bin/ /app/bin
@@ -74,7 +75,3 @@ RUN patch -p0 < patches/import_csv_data.rb.patch \
     && patch -p0 < patches/disable_encrypt.patch \
     # For compile client with SQLite
     && find patches/compile -type f | xargs cat | patch -p0
-
-# Add user customize content
-ADD customize/ /app
-RUN if [[ -f /app/bin/customize ]]; then customize; fi
