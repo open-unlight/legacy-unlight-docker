@@ -58,9 +58,8 @@ COPY --from=gem /usr/local/bundle/config /usr/local/bundle/config
 ADD src/app/server/ $APP_ROOT/server
 ADD server/ $APP_ROOT/server
 ADD patches/ $APP_ROOT/patches
-ADD bin/ $APP_ROOT/bin
 
-ENV PATH $APP_ROOT/bin:$PATH
+ENV PATH $APP_ROOT/server/bin:$PATH
 
 # Apply patch
 RUN cp $APP_ROOT/server/src/server_ip.rb_orig $APP_ROOT/server/src/server_ip.rb \

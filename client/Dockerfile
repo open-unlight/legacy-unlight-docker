@@ -47,9 +47,8 @@ ADD server/ /app/server
 ADD client/ /app/client
 ADD fonts/* /app/client/data/
 ADD patches/ /app/patches
-ADD bin/ /app/bin
 
-ENV PATH /app/bin:$PATH
+ENV PATH /app/client/bin:$PATH
 
 # Prepare necessary directory
 RUN mkdir -p /app/server/bin/pids \
