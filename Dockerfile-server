@@ -1,6 +1,8 @@
+ARG APP_ROOT=/app
+ARG RUBY_VERSION=2.6
 
 # Pre-compile Gems
-FROM ruby:2.6-alpine AS gem
+FROM ruby:${RUBY_VERSION}-alpine AS gem
 
 RUN apk --update \
         add --no-cache \
@@ -14,20 +16,19 @@ RUN apk --update \
         sqlite-dev
 
 # Setup Application
-ARG APP_ROOT=/app
+ARG APP_ROOT
 ENV APP_ROOT=${APP_ROOT}
-RUN mkdir -p $APP_ROOT/server \
-             $APP_ROOT/dist
+RUN mkdir -p $APP_ROOT/server
 
 WORKDIR $APP_ROOT/
 
-COPY rework/server/Gemfile* customize/server/Gemfile* $APP_ROOT/server/
+COPY rework/server/Gemfile* $APP_ROOT/server/
 RUN cd $APP_ROOT/server \
-    && bundle install --deployment --no-cache \
+    && bundle install --deployment --no-cache --without development \
     && rm -rf vendor/bundle/ruby/**/cache
 
 # Server
-FROM ruby:2.6.3-alpine
+FROM ruby:${RUBY_VERSION}-alpine
 
 RUN apk --update \
         add --no-cache \
@@ -40,12 +41,14 @@ RUN apk --update \
         mariadb-client \
         sqlite
 
-ARG APP_ROOT=/app
+ARG APP_ROOT
 ENV APP_ROOT=${APP_ROOT}
 
 # Setup Application
 RUN mkdir -p $APP_ROOT/server \
-             $APP_ROOT/dist
+      && mkdir -p $APP_ROOT/server/bin/pids \
+      && mkdir -p $APP_ROOT/server/data/backup
+
 WORKDIR $APP_ROOT/
 
 COPY --from=gem $APP_ROOT/server/vendor/bundle $APP_ROOT/server/vendor/bundle
@@ -58,11 +61,6 @@ ADD patches/ $APP_ROOT/patches
 ADD bin/ $APP_ROOT/bin
 
 ENV PATH $APP_ROOT/bin:$PATH
-
-# Prepare necessary directory
-RUN mkdir -p $APP_ROOT/server/bin/pids \
-    && mkdir -p $APP_ROOT/client/script/data \
-    && mkdir -p $APP_ROOT/server/data/backup
 
 # Apply patch
 RUN cp $APP_ROOT/server/src/server_ip.rb_orig $APP_ROOT/server/src/server_ip.rb \
@@ -77,7 +75,3 @@ RUN patch -p0 < patches/import_csv_data.rb.patch \
     && patch -p0 < patches/server.patch \
     # For direct test game
     && patch -p0 < patches/disable_server_encrypt.patch
-
-# Add user customize content
-ADD customize/ $APP_ROOT
-RUN if [[ -f $APP_ROOT/bin/customize ]]; then customize; fi
