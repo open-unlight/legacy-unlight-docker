@@ -1,3 +1,5 @@
+ARG APP_ROOT=/app
+
 FROM ubuntu:xenial
 
 # Install Dependencies
@@ -25,15 +27,21 @@ RUN apt-get update \
 
 RUN gem install bundler
 
+ARG APP_ROOT
+ENV APP_ROOT=${APP_ROOT}
+ENV SERVER_ROOT=${APP_ROOT}/server
+ENV CLIENT_ROOT=${APP_ROOT}/client
+ENV DIST_DIR=${APP_ROOT}/dist
+
 # Setup Application
-RUN mkdir -p /app/server \
-            /app/client \
-            /app/dist
-WORKDIR /app
+RUN mkdir -p $SERVER_ROOT \
+             $CLIENT_ROOT \
+             $DIST_DIR
+WORKDIR $CLIENT_ROOT
 
 # Setup Server
-COPY server/Gemfile* /app/server/
-RUN cd /app/server && bundle install
+COPY server/Gemfile* $SERVER_ROOT/
+RUN cd $SERVER_ROOT && bundle install
 
 # Setup Flex
 ENV FLEXSDK_VERSION 3.6a
@@ -42,35 +50,18 @@ RUN curl -fL -o /tmp/flexsdk.zip http://download.macromedia.com/pub/flex/sdk/fle
     && rm -rf /tmp/*
 
 # Add Source Files
-ADD src/app /app
-ADD server/ /app/server
-ADD client/ /app/client
-ADD fonts/* /app/client/data/
+ADD src/app $APP_ROOT
+ADD server/ $SERVER_ROOT
+ADD client/ $CLIENT_ROOT
 ADD patches/ /app/patches
 
-ENV PATH /app/client/bin:$PATH
+ENV PATH $CLIENT_ROOT/bin:$PATH
 
 # Prepare necessary directory
-RUN mkdir -p /app/server/bin/pids \
-    && mkdir -p /app/client/script/data \
-    && mkdir -p /app/server/data/backup
+RUN mkdir -p $SERVER_ROOT/bin/pids \
+    && mkdir -p $SERVER_ROOT/data/backup \
+    && mkdir -p $CLIENT_ROOT/script/data
 
 # Apply patch
-RUN cp /app/server/src/server_ip.rb_orig /app/server/src/server_ip.rb \
-    && cp /app/server/src/constants/locale_constants.rb_sb /app/server/src/constants/locale_constants.rb \
-    # Missing
-    && cp /app/server/src/constants/locale_constants.rb_sb /app/server/src/constants/locale_constants.rb_tcn \
-    && cp /app/server/src/net/crypt.rb_orig /app/server/src/net/crypt.rb \
-    && cp /app/client/src/Unlight-config_sandbox.xml /app/client/src/Unlight-config.xml
-
-RUN patch -p0 < patches/import_csv_data.rb.patch \
-    && patch -p0 < patches/create_const_data.rb.patch \
-    && patch -p0 < patches/Unlight-config.xml.patch \
-    && patch -p0 < patches/create_font_swf.rb.patch \
-    && patch -p0 < patches/constants.rb.patch \
-    # For run server inside docker
-    && patch -p0 < patches/server.patch \
-    # For direct test game
-    && patch -p0 < patches/disable_encrypt.patch \
-    # For compile client with SQLite
-    && find patches/compile -type f | xargs cat | patch -p0
+RUN sh $CLIENT_ROOT/scripts/prepare.sh \
+    && sh $CLIENT_ROOT/scripts/patch.sh

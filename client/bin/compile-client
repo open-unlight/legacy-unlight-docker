@@ -2,10 +2,15 @@
 
 set -e
 echo 'Prepare static assets...'
-cp -r /assets/* /app/client
+cp -r /assets/* $CLIENT_ROOT
+
+echo 'Add fonts...'
+cp -r $APP_ROOT/fonts/* $CLIENT_ROOT/data
+
+# Start services
 /etc/init.d/memcached start
 
-cd /app/server
+cd $SERVER_ROOT
 # Import Game Data (mysql command must be executed correctly)
 ruby -E UTF-8 script/import_csv_data.rb $LANGUAGE
 # Create constdata_keys_jp.rb
@@ -16,7 +21,7 @@ ruby -E UTF-8 script/create_font_swf.rb -c
 # TODO: _tcn keys is not exists
 cp script/constdata_keys_jp.rb script/constdata_keys_$LANGUAGE.rb
 
-cd /app/client
+cd $CLIENT_ROOT
 # Initialize
 ruby script/update_version_file.rb
 # Choose to use Traditional Chinese version swf
@@ -28,6 +33,6 @@ ruby script/dae_converter.rb
 /usr/lib/flex3/bin/mxmlc ./src/Unlight.mxml
 
 # Copy files to dist
-cd /app/dist
-cp /app/client/src/Unlight.swf .
-cp /app/server/script/normal_index.html ./index.html
+cd $DIST_DIR
+cp $CLIENT_ROOT/src/Unlight.swf .
+cp $SERVER_ROOT/script/normal_index.html ./index.html

@@ -11,6 +11,7 @@ builder:
 Unlight.swf:
 	@docker run --rm -v ${ROOT_DIR}/assets:/assets \
 									-v ${ROOT_DIR}/dist:/app/dist \
+									-v ${ROOT_DIR}/fonts:/app/fonts \
 									--env-file compile.env \
 									unlight-client compile-client
 
