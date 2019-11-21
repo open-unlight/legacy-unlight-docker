@@ -2,6 +2,7 @@ Legacy Unlight Docker
 ===
 
 [![](https://images.microbadger.com/badges/image/openunlight/legacy-server.svg)](https://microbadger.com/images/openunlight/legacy-server "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/openunlight/legacy-server.svg)](https://microbadger.com/images/openunlight/legacy-server "Get your own version badge on microbadger.com") [![Docker Repository on Quay](https://quay.io/repository/open-unlight/legacy-server/status "Docker Repository on Quay")](https://quay.io/repository/open-unlight/legacy-server)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fopen-unlight%2Flegacy-unlight-docker.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fopen-unlight%2Flegacy-unlight-docker?ref=badge_shield)
 
 The CPA is released Unlight's [source code](https://github.com/unlightcpa/Unlight) but there is no any document and stable version for setup.
 This repository provides a pre-package docker image for compile client (SWF) and server (Ruby) and lets anyone can serve their Unlight server.
@@ -143,3 +144,7 @@ And run `bin/unlight restart db` to restart your database server.
 ##### Unlight Command
 
 This project use shared docker-compose.yml, please use `bin/unlight` to replace with `docker-compose` otherwise you will lose config.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fopen-unlight%2Flegacy-unlight-docker.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fopen-unlight%2Flegacy-unlight-docker?ref=badge_large)
