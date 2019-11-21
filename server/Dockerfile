@@ -50,7 +50,7 @@ ENV SERVER_ROOT=$APP_ROOT/server
 RUN mkdir -p $SERVER_ROOT \
       && mkdir -p $SERVER_ROOT/bin/pids \
       && mkdir -p $SERVER_ROOT/data/backup
-WORKDIR $APP_ROOT/
+WORKDIR $SERVER_ROOT
 
 COPY --from=gem $SERVER_ROOT/vendor/bundle $SERVER_ROOT/vendor/bundle
 COPY --from=gem /usr/local/bundle/config /usr/local/bundle/config
