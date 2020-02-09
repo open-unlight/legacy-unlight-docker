@@ -1,0 +1,11 @@
+--- server/src/net/crypt.rb
++++ server/src/net/crypt.rb
+@@ -31,7 +31,7 @@ module Unlight
+           des_a[i]=a[i]^s[(i)%slen]
+           i+=1
+         end
+-        des_a
++        des_a.pack("C*")
+       end
+
+       def encrypt2(data)

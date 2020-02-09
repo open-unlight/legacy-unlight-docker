@@ -6,20 +6,20 @@ ROOT_DIR=$(shell pwd)
 
 builder:
 	@echo 'Prepare build environment...'
-	@docker build -q -t unlight-client -f client/Dockerfile .
+	@docker build -q -t openunlight/legacy-builder -f client/Dockerfile .
 
 Unlight.swf:
 	@docker run --rm -v ${ROOT_DIR}/assets:/assets \
 									-v ${ROOT_DIR}/dist:/app/dist \
 									-v ${ROOT_DIR}/fonts:/app/fonts \
 									--env-file compile.env \
-									unlight-client compile-client
+									openunlight/legacy-builder compile-client
 
 client: builder Unlight.swf
 
 server:
 	@echo 'Prepare docker image for server...'
-	@docker build -t unlight-server -f server/Dockerfile .
+	@docker build -t openunlight/legacy-server -f server/Dockerfile .
 
 update:
 	@echo 'Starting import new game data...'
