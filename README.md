@@ -31,7 +31,7 @@ git submodule update --recursive
 
 We provide a marketplace image for one-click setup server.
 
-[![Create Droplet](https://github.com/open-unlight/legacy-unlight-docker/master/docs/images/create-droplet.png)](https://marketplace.digitalocean.com/apps/open-unlight?action=deploy&refcode=3e237256289e)
+[![Create Droplet](https://github.com/open-unlight/legacy-unlight-docker/blob/master/docs/images/create-droplet.png?raw=true)](https://marketplace.digitalocean.com/apps/open-unlight?action=deploy&refcode=3e237256289e)
 
 
 ## Usage
