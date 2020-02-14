@@ -27,6 +27,13 @@ git submodule init
 git submodule update --recursive
 ```
 
+### DigitalOcean
+
+We provide a marketplace image for one-click setup server.
+
+[![Create Droplet](https://github.com/open-unlight/legacy-unlight-docker/master/docs/images/create-droplet.png)](https://marketplace.digitalocean.com/apps/open-unlight?action=deploy&refcode=3e237256289e)
+
+
 ## Usage
 
 ### Client
