@@ -1,5 +1,5 @@
 ARG APP_ROOT=/app
-ARG RUBY_VERSION=2.6
+ARG RUBY_VERSION=2.7
 
 # Pre-compile Gems
 FROM ruby:${RUBY_VERSION}-alpine AS gem
