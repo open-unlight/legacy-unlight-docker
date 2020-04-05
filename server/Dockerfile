@@ -25,8 +25,13 @@ WORKDIR $SERVER_ROOT
 
 COPY server/Gemfile* $SERVER_ROOT/
 RUN cd $SERVER_ROOT \
-    && bundle install --deployment --no-cache --without development \
-    && rm -rf vendor/bundle/ruby/**/cache
+    && gem install bundler:1.17.3 \
+    && gem uninstall bundler:1.17.2 \
+    && bundle config --global deployment 'true' \
+    && bundle config --global frozen 'true' \
+    && bundle config --global without 'development test' \
+    && bundle install --no-cache \
+    && rm -rf /usr/local/bundle/cache/*.gem
 
 # Server
 FROM ruby:${RUBY_VERSION}-alpine
@@ -52,8 +57,7 @@ RUN mkdir -p $SERVER_ROOT \
       && mkdir -p $SERVER_ROOT/data/backup
 WORKDIR $SERVER_ROOT
 
-COPY --from=gem $SERVER_ROOT/vendor/bundle $SERVER_ROOT/vendor/bundle
-COPY --from=gem /usr/local/bundle/config /usr/local/bundle/config
+COPY --from=gem /usr/local/bundle /usr/local/bundle
 
 # Add Source Files
 ADD src/app/server/ $SERVER_ROOT
