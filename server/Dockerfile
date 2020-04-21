@@ -1,5 +1,5 @@
 ARG APP_ROOT=/app
-ARG RUBY_VERSION=2.6
+ARG RUBY_VERSION=2.6.5
 
 # Pre-compile Gems
 FROM ruby:${RUBY_VERSION}-alpine AS gem
@@ -31,6 +31,8 @@ RUN cd $SERVER_ROOT \
     && bundle config --global frozen 'true' \
     && bundle config --global without 'development test' \
     && bundle install --no-cache \
+    && find /usr/local/bundle -type f -name '*.c' -delete \
+    && find /usr/local/bundle -type f -name '*.o' -delete \
     && rm -rf /usr/local/bundle/cache/*.gem
 
 # Server
