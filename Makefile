@@ -6,7 +6,7 @@ ROOT_DIR=$(shell pwd)
 
 builder:
 	@echo 'Prepare build environment...'
-	@docker build -q -t openunlight/legacy-builder -f client/Dockerfile .
+	@docker build -t openunlight/legacy-builder -f client/Dockerfile .
 
 Unlight.swf:
 	@docker run --rm -v ${ROOT_DIR}/assets:/assets \

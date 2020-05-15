@@ -1,6 +1,6 @@
 ARG APP_ROOT=/app
 
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 
 # Install Dependencies
 ENV DEBIAN_FRONTEND noninteractive
@@ -25,7 +25,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
               /tmp/*
 
-RUN gem install bundler
+RUN gem install bundler -v 1.17.3
 
 ARG APP_ROOT
 ENV APP_ROOT=${APP_ROOT}
